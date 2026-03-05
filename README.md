@@ -1,75 +1,118 @@
-# API Docs Builder
+# 🚀 API Docs Builder
 
-A production-ready TypeScript + React + Tailwind app for building beautiful API documentation with live preview, dark mode, and export features.
+A professional, production-ready **TypeScript + React + Tailwind** suite designed to help developers build, preview, and export beautiful API documentation in seconds.
 
-## Stack
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6?logo=typescript)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css)
+![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite)
 
-- **React 18** + **TypeScript**
-- **Tailwind CSS v3** (dark mode via `.dark` class)
-- **shadcn-style** custom UI components (Button, Input, Textarea, Select, Badge, Label, Tooltip, Separator)
-- **Lucide React** icons
-- **Vite** for blazing fast dev/build
+---
 
-## Setup
+## ✨ Key Features
+
+| Feature                 | Description                                                             |
+| :---------------------- | :---------------------------------------------------------------------- |
+| **⚡ Live Preview**     | Real-time split-pane editing with instant visual updates.               |
+| **📄 Export Formats**   | Download as clean **Markdown (.md)** or high-fidelity **Word (.docx)**. |
+| **🔄 Project Sync**     | Full project **Import/Export (.json)** support for backup and sharing.  |
+| **💾 Auto-Persistence** | Session state and theme persisted automatically via `localStorage`.     |
+| **🔍 Smart Search**     | Filter and find endpoints instantly with the integrated search bar.     |
+| **📋 Clipboard Ready**  | One-click **Copy Doc** formatted for Google Docs or Notion.             |
+| **🛠️ cURL Generator**   | Automatically generates valid cURL commands based on your inputs.       |
+| **🌓 Dark Mode**        | System-aware theme switching with a sleek glassmorphism UI.             |
+| **📑 Multi-Endpoint**   | Manage multiple API endpoints in a single tabbed session.               |
+
+---
+
+## 🛠️ Tech Stack
+
+- **Core**: [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with custom Shadc-style components
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Primitives**: UI powered by [Radix UI](https://www.radix-ui.com/) (ScrollArea, Switch, Tabs)
+- **Doc Generation**: [docx](https://docx.js.org/) for professional .docx exports
+- **Build Tool**: [Vite](https://vitejs.dev/)
+
+---
+
+## 🚀 Getting Started
+
+### 1. Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-# 1. Install dependencies
 npm install
+```
 
-# 2. Start dev server
+### 2. Development
+
+Launch the development server with Hot Module Replacement (HMR):
+
+```bash
 npm run dev
+```
 
-# 3. Build for production
+### 3. Production Build
+
+Compile and optimize for production:
+
+```bash
 npm run build
 ```
 
-## Features
+---
 
-| Feature | Details |
-|---------|---------|
-| **Live Preview** | Split-pane editor + real-time rich preview |
-| **Rich View** | Fully rendered doc with tables, code blocks, method badges |
-| **Markdown Source** | Toggle to see raw markdown |
-| **cURL View** | Auto-generated cURL from your inputs |
-| **Copy Doc** | One-click copy of markdown to clipboard (paste into Google Docs) |
-| **Download .md** | Export clean `.md` file per endpoint |
-| **Light / Dark Mode** | System-aware + persisted to localStorage |
-| **Multiple Endpoints** | Tab-based multi-endpoint session |
-| **TypeScript** | Full type safety across all components |
-| **HTTP Methods** | GET, POST, PUT, PATCH, DELETE |
-| **Status Badges** | Stable, Beta, Deprecated, Internal |
-| **Headers Builder** | Key/value with required flags |
-| **Parameters** | Name, type, location (query/body/path/header), required, default, description |
-| **Request Body** | JSON or form-data, with content-type badge |
-| **Response Example** | With status code display |
-| **Error Codes** | Code + description rows |
-| **Deprecation** | Mark endpoint deprecated with custom message |
-| **Tags & Versioning** | Tag + version metadata per endpoint |
-| **Notes** | Free-form notes field |
-| **Hover-to-Copy** | Code blocks have hover copy buttons |
+## 📖 Usage Guide
 
-## Project Structure
+### Managing Endpoints
 
-```
+- **Add**: Click the **(+)** icon in the sidebar/topbar to create a new endpoint.
+- **Switch**: Click on any endpoint tab to switch focus.
+- **Delete**: Hover over an endpoint tab and click the **(X)** to remove it.
+
+### Exporting Your Work
+
+- **Copy**: Use the **Copy Doc** button to copy the Markdown source to your clipboard.
+- **File**: Download the current endpoint as `.md` or `.docx` using the respective buttons.
+- **Suite**: Export the entire project as a `.json` file for later use or collaboration.
+
+### Documentation Details
+
+Fill in the editor on the left to define:
+
+- **Methods**: GET, POST, PUT, PATCH, DELETE.
+- **Status**: Stable, Beta, Deprecated, Internal.
+- **Parameters**: Define name, type, location (Query/Body/Path/Header), and default values.
+- **Headers**: Key-value pairs with requirement flags.
+- **Response**: Example JSON responses and status codes.
+
+---
+
+## 📁 Project Structure
+
+```bash
 src/
-├── types/index.ts           # All TypeScript types
-├── lib/utils.ts             # cn(), uid(), generators, color maps
-├── hooks/useTheme.ts        # Dark mode hook
-├── components/
-│   ├── ui/                  # shadcn-style primitives
-│   │   ├── button.tsx
-│   │   ├── input.tsx
-│   │   ├── textarea.tsx
-│   │   ├── select.tsx
-│   │   ├── label.tsx
-│   │   ├── badge.tsx
-│   │   ├── separator.tsx
-│   │   └── tooltip.tsx
-│   ├── EndpointEditor.tsx   # Left-pane form editor
-│   ├── Preview.tsx          # Right-pane rich/markdown/curl preview
-│   ├── FormField.tsx        # Labeled field wrapper
-│   └── SectionHeader.tsx    # Section header with Add button
-├── App.tsx                  # Root layout, tabs, topbar
-├── main.tsx
-└── index.css               # Tailwind + CSS variables (light/dark)
+├── components/          # UI Components
+│   ├── ui/              # Radix + Tailwind base primitives
+│   ├── EndpointEditor/  # Main form for editing API details
+│   ├── Preview/         # Rich/MD/cURL preview engine
+│   └── SectionHeader/   # Reusable section headers
+├── hooks/               # Custom hooks (e.g., useTheme)
+├── lib/                 # Utility functions (Uid, Markdown/Docx generators)
+├── types/               # TypeScript interfaces & enums
+├── App.tsx              # Main layout and state management
+└── index.css            # Global styles and theme variables
 ```
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. Feel free to use, modify, and distribute it as you see fit.
+
+---
+
+_Built with ❤️ for developers by Dinesh Rout._
