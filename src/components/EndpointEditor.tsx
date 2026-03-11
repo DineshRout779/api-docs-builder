@@ -15,6 +15,7 @@ import {
   METHOD_COLORS,
   STATUS_COLORS,
   parseCurlToEndpoint,
+  parseJsonToParams,
 } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -37,7 +38,13 @@ const PARAM_TYPES: ParamType[] = [
   'array',
   'file',
 ];
-const PARAM_LOCATIONS: ParamLocation[] = ['query', 'body', 'path', 'header'];
+const PARAM_LOCATIONS: ParamLocation[] = [
+  'query',
+  'body',
+  'path',
+  'header',
+  'decrypted',
+];
 
 interface Props {
   endpoint: ApiEndpoint;
@@ -510,16 +517,18 @@ export function EndpointEditor({ endpoint: ep, onChange }: Props) {
             </span>
           ))}
         </div>
-        {ep.params.map((p) => (
-          <ParamRow
-            key={p.id}
-            param={p}
-            onChange={updateParam}
-            onDelete={() =>
-              onChange({ params: ep.params.filter((x) => x.id !== p.id) })
-            }
-          />
-        ))}
+        {ep.params
+          .filter((p) => p.location !== 'decrypted')
+          .map((p) => (
+            <ParamRow
+              key={p.id}
+              param={p}
+              onChange={updateParam}
+              onDelete={() =>
+                onChange({ params: ep.params.filter((x) => x.id !== p.id) })
+              }
+            />
+          ))}
         {ep.params.length === 0 && (
           <p className='text-xs text-muted-foreground/50 py-2 italic'>
             No parameters defined
@@ -588,7 +597,7 @@ export function EndpointEditor({ endpoint: ep, onChange }: Props) {
               </label>
             </div>
             {ep.isEncrypted && (
-              <div className='mt-3'>
+              <div className='mt-3 space-y-4'>
                 <FormField label='Decrypted Request Body'>
                   <Textarea
                     value={ep.decryptedRequestBody ?? ''}
@@ -600,6 +609,90 @@ export function EndpointEditor({ endpoint: ep, onChange }: Props) {
                     mono
                   />
                 </FormField>
+
+                <div>
+                  <div className='flex items-center gap-3 mb-2'>
+                    <SectionHeader
+                      title='Decrypted Parameters'
+                      onAdd={() =>
+                        onChange({
+                          params: [
+                            ...ep.params,
+                            {
+                              id: uid(),
+                              name: '',
+                              type: 'string',
+                              location: 'decrypted',
+                              required: false,
+                              description: '',
+                              example: '',
+                            },
+                          ],
+                        })
+                      }
+                    />
+                    <Button
+                      variant='ghost'
+                      size='sm'
+                      className='h-7 px-2 text-[10px] text-muted-foreground hover:text-primary'
+                      onClick={() => {
+                        const newParams = parseJsonToParams(
+                          ep.decryptedRequestBody || '',
+                          'decrypted',
+                        );
+                        // Filter out existing decrypted params that have the same name as new ones
+                        const filteredExisting = ep.params.filter(
+                          (p) =>
+                            p.location !== 'decrypted' ||
+                            !newParams.some((np) => np.name === p.name),
+                        );
+                        onChange({
+                          params: [...filteredExisting, ...newParams],
+                        });
+                      }}
+                      disabled={!ep.decryptedRequestBody?.trim()}
+                    >
+                      Autofill from JSON
+                    </Button>
+                  </div>
+                  <div className='grid grid-cols-[1fr_90px_80px_60px_1fr_32px] gap-2 mb-1'>
+                    {[
+                      'Name',
+                      'Type',
+                      'Location',
+                      'Req.',
+                      'Description',
+                      '',
+                    ].map((h) => (
+                      <span
+                        key={h}
+                        className='text-[10px] text-muted-foreground/50 uppercase tracking-widest px-1'
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                  {ep.params
+                    .filter((p) => p.location === 'decrypted')
+                    .map((p) => (
+                      <ParamRow
+                        key={p.id}
+                        param={p}
+                        onChange={updateParam}
+                        onDelete={() =>
+                          onChange({
+                            params: ep.params.filter((x) => x.id !== p.id),
+                          })
+                        }
+                      />
+                    ))}
+                  {ep.params.filter((p) => p.location === 'decrypted')
+                    .length === 0 && (
+                    <p className='text-xs text-muted-foreground/50 py-2 italic'>
+                      No decrypted parameters defined
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </>
